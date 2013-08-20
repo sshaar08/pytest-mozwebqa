@@ -27,11 +27,11 @@ class Client(object):
 
         if self.webdriver:
             self.driver = options.driver
-            self.capabilities = options.capabilities
+            self.capabilities = options.capabilities or []
             self.chrome_path = options.chrome_path
             self.chrome_options = options.chrome_options or '{}'
             self.firefox_path = options.firefox_path
-            self.firefox_preferences = options.firefox_preferences
+            self.firefox_preferences = options.firefox_preferences or []
             self.profile_path = options.profile_path
             self.extension_paths = options.extension_paths or []
             self.opera_path = options.opera_path
@@ -98,7 +98,6 @@ class Client(object):
             elif value.lower() in ['true', 'false']:
                 value = value.lower() == 'true'
             capabilities.update({name: value})
-        raise Exception(capabilities)
         if self.proxy_host and self.proxy_port:
             proxy = Proxy()
             proxy.http_proxy = '%s:%s' % (self.proxy_host, self.proxy_port)
