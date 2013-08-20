@@ -41,7 +41,7 @@ For full usage details run the following command:
       --chromepath=path    path to the google chrome driver executable.
       --chromeopts=str     json string of google chrome options to set (webdriver).
       --firefoxpath=path   path to the target firefox binary.
-      --firefoxpref=str    json string of firefox preferences to set (webdriver).
+      --firefoxpref=str    firefox preference name and value to set in format "name:value" (webdriver).
       --profilepath=path   path to the firefox profile directory (webdriver).
       --extension=path     path to browser extension to install (webdriver).
       --operapath=path     path to the opera driver.
@@ -158,11 +158,11 @@ If you're using WebDriver it's possible to specify additional capabilities on th
 Setting Firefox preferences
 ---------------------------
 
-If you're using WebDriver and Firefox it's possible to set custom preferences. These are specified using a JSON string:
+If you're using WebDriver and Firefox it's possible to set custom preferences:
 
 ### Example (disable addon compatibility checking)
 
-    --firefoxpref='{"extensions.checkCompatibility.nightly":false}'
+    --firefoxpref=extensions.checkCompatibility.nightly:false
 
 Specifying a Firefox profile
 ----------------------------

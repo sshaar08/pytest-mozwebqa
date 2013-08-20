@@ -84,7 +84,7 @@ def testSpecifyingFirefoxProfileAndOverridingPreferences(testdir, webserver):
     reprec = testdir.inline_run('--baseurl=http://localhost:%s' % webserver.port,
                                 '--api=webdriver',
                                 '--driver=firefox',
-                                '--firefoxpref=''{"browser.anchor_color":"#FF0000"}''',
+                                '--firefoxpref=browser.anchor_color:#FF0000',
                                 '--profilepath=%s' % profile,
                                 file_test)
     passed, skipped, failed = reprec.listoutcomes()

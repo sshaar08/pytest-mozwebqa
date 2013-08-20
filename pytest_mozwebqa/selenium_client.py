@@ -171,8 +171,15 @@ class Client(object):
 
     def create_firefox_profile(self, preferences, profile_path, extensions):
         profile = webdriver.FirefoxProfile(profile_path)
-        if preferences:
-            [profile.set_preference(k, v) for k, v in json.loads(preferences).items()]
+        for p in preferences:
+            name, value = p.split(':')
+            # handle integer preferences
+            if value.isdigit():
+                value = int(value)
+            # handle boolean preferences
+            elif value.lower() in ['true', 'false']:
+                value = value.lower() == 'true'
+            profile.set_preference(name, value)
         profile.assume_untrusted_cert_issuer = self.assume_untrusted
         profile.update_preferences()
         for extension in extensions:

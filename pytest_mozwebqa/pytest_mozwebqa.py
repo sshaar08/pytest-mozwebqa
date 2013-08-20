@@ -218,10 +218,10 @@ def pytest_addoption(parser):
                      metavar='path',
                      help='path to the target firefox binary.')
     group._addoption('--firefoxpref',
-                     action='store',
+                     action='append',
                      dest='firefox_preferences',
                      metavar='str',
-                     help='json string of firefox preferences to set (webdriver).')
+                     help='firefox preference name and value to set in format "name:value" (webdriver).')
     group._addoption('--profilepath',
                      action='store',
                      dest='profile_path',
