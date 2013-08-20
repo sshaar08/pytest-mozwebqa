@@ -37,7 +37,7 @@ For full usage details run the following command:
       --host=str           host that selenium server is listening on. (default: localhost)
       --port=num           port that selenium server is listening on. (default: 4444)
       --driver=str         webdriver implementation. (default: Remote)
-      --capabilities=str   json string of additional capabilties to set (webdriver).
+      --capability=str     additional capabilty to set in format "name:value" (webdriver).
       --chromepath=path    path to the google chrome driver executable.
       --chromeopts=str     json string of google chrome options to set (webdriver).
       --firefoxpath=path   path to the target firefox binary.
@@ -148,11 +148,11 @@ If running against a sensitive (production) environment any destructive tests wi
 Setting WebDriver capabilities
 ------------------------------
 
-If you're using WebDriver it's possible to specify additional capabilities on the command line using a JSON string:
+If you're using WebDriver it's possible to specify additional capabilities on the command line:
 
 ### Example (accept SSL certificates)
 
-    --capabilities='{"acceptSslCerts":true}'
+    --capability=acceptSslCerts:true
 
 
 Setting Firefox preferences

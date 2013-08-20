@@ -89,8 +89,16 @@ class Client(object):
 
     def start_webdriver_client(self):
         capabilities = {}
-        if self.capabilities:
-            capabilities.update(json.loads(self.capabilities))
+        for c in self.capabilities:
+            name, value = c.split(':')
+            # handle integer capabilities
+            if value.isdigit():
+                value = int(value)
+            # handle boolean capabilities
+            elif value.lower() in ['true', 'false']:
+                value = value.lower() == 'true'
+            capabilities.update({name: value})
+        raise Exception(capabilities)
         if self.proxy_host and self.proxy_port:
             proxy = Proxy()
             proxy.http_proxy = '%s:%s' % (self.proxy_host, self.proxy_port)

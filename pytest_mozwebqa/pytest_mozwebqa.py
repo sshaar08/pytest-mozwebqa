@@ -202,11 +202,11 @@ def pytest_addoption(parser):
                      default='Remote',
                      metavar='str',
                      help='webdriver implementation. (default: %default)')
-    group._addoption('--capabilities',
-                     action='store',
+    group._addoption('--capability',
+                     action='append',
                      dest='capabilities',
                      metavar='str',
-                     help='json string of additional capabilties to set (webdriver).')
+                     help='additional capabilty to set in format "name:value" (webdriver).')
     group._addoption('--chromepath',
                      action='store',
                      dest='chrome_path',
