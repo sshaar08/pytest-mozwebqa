@@ -46,17 +46,25 @@ class Client(selenium_client.Client):
             raise pytest.UsageError("--platform must be specified when using the 'rc' api with sauce labs.")
 
     @property
+    def privacy(self):
+        privacy_marks = ['private', 'team', 'share', 'public_restricted', 'public']
+        for privacy_mark in privacy_marks:
+            if privacy_mark in self.keywords:
+                return privacy_mark.replace("_", " ")
+        return None
+
+    @property
     def common_settings(self):
-        config = ConfigParser.ConfigParser(defaults={'tags': ''})
+        config = ConfigParser.ConfigParser(defaults={'tags': '', 'privacy': 'private'})
         config.read('mozwebqa.cfg')
         tags = config.get('DEFAULT', 'tags').split(',')
         from _pytest.mark import MarkInfo
         tags.extend([mark for mark in self.keywords.keys() if isinstance(self.keywords[mark], MarkInfo)])
+        privacy = self.privacy or config.get('DEFAULT', 'privacy')
         return {'build': self.build or None,
                 'name': self.test_id,
                 'tags': tags,
-                'public': 'private' not in self.keywords,
-                'restricted-public-info': 'public' not in self.keywords}
+                'public': privacy}
 
     def start_webdriver_client(self):
         capabilities = self.common_settings

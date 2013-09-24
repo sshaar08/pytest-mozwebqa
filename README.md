@@ -77,10 +77,15 @@ be project specific.
     baseurl: 'http://www.example.com'
     api: 'rc'
     tags: 'tag1, tag2'
+    privacy: 'public restricted'
 
 The `tags` entry is an optional comma separated list of tags that are set when
 using Sauce Labs. This is useful for filtering the list of jobs based on the
 application under test or similar.
+
+The `privacy` setting is used when you run the tests on Sauce Labs - its used
+to set the visibility of tests (this corresponds to the `public` capability entry
+used by Sauce Labs).
 
 ### Examples
 
@@ -229,6 +234,12 @@ Privacy
 -------
 
 With Selenium RC you can capture log files. By default log files are not captured as these may contain confidential data such as user credentials. If you are confident that a test does not contain such data, you can explicitly set the test as public (the public mark has no effect on WebDriver tests, which do not capture logs):
+
+Privacy marks have higher priority than the `privacy` entry in `mozwebqa.cfg`.
+
+### List of applicable privacy marks:
+
+    private, team, share, public_restricted, public
 
 ### Example
 
