@@ -206,7 +206,7 @@ def pytest_addoption(parser):
                      action='append',
                      dest='capabilities',
                      metavar='str',
-                     help='additional capabilty to set in format "name:value" (webdriver).')
+                     help='additional capability to set in format "name:value" (webdriver).')
     group._addoption('--chromepath',
                      action='store',
                      dest='chrome_path',
