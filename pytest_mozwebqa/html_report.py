@@ -65,6 +65,7 @@ class HTMLReport(object):
                 links.update({'HTML': os.path.join(relative_path, filename)})
 
             # Log may contain passwords, etc so we only capture it for tests marked as public
+            # TODO: Update to use the 'privacy' mark with the level set as an attribute
             if report.debug['logs'] and 'public' in report.keywords:
                 filename = 'log.txt'
                 f = open(os.path.join(full_path, filename), 'wb')
