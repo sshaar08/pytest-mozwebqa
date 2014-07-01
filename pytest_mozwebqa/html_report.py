@@ -64,7 +64,8 @@ class HTMLReport(object):
                 f.write(report.debug['html'][-1])
                 links.update({'HTML': os.path.join(relative_path, filename)})
 
-            if report.debug['logs']:
+            # Log may contain passwords, etc so we only capture it for tests marked as public
+            if report.public and report.debug['logs']:
                 filename = 'log.txt'
                 f = open(os.path.join(full_path, filename), 'wb')
                 f.write(report.debug['logs'][-1])
