@@ -28,6 +28,37 @@ def testStartWebDriverClient(testdir, webserver):
     assert len(passed) == 1
 
 
+def testKeepWebDriverWindowOpen(testdir):
+        """Test @pytest.mark.selenium_noclose mark"""
+        file_test = testdir.makepyfile("""
+            import pytest
+            from urllib2 import URLError
+            @pytest.mark.selenium_noclose
+            @pytest.mark.nondestructive
+            def test_selenium(mozwebqa):
+                mozwebqa.selenium.get(mozwebqa.base_url)
+                header = mozwebqa.selenium.find_element_by_tag_name('h1')
+                assert header.text == 'Success!'
+
+            @pytest.mark.skip_selenium
+            @pytest.mark.nondestructive
+            def test_notclosed(mozwebqa):
+                try:
+                    handles = mozwebqa.selenium_client.selenium.window_handles
+                    mozwebqa.selenium_client.selenium.switch_to_window(handles)
+                except URLError:
+                    pytest.fail("Previous window was not open")
+                else:
+                    assert True
+        """)
+        reprec = testdir.inline_run('--baseurl=http://localhost:8000', '--api=webdriver', '--driver=firefox', file_test)
+        passed, skipped, failed = reprec.listoutcomes()
+        assert len(passed) == 2
+        #Now clean-up
+        from pytest_mozwebqa import TestSetup
+        TestSetup.selenium_client.stop()
+
+
 def testSpecifyingFirefoxProfile(testdir, webserver):
     """Test that a specified profile is used when starting firefox.
         The profile changes the colors in the browser, which are then reflected when calling
@@ -117,6 +148,7 @@ def testAddingFirefoxExtension(testdir, webserver):
     passed, skipped, failed = reprec.listoutcomes()
     assert len(passed) == 1
 
+
 def testFirefoxProxy(testdir, webserver):
     """Test that a proxy can be set for firefox."""
     file_test = testdir.makepyfile("""
@@ -127,14 +159,10 @@ def testFirefoxProxy(testdir, webserver):
             header = mozwebqa.selenium.find_element_by_tag_name('h1')
             assert header.text == 'Success!'
     """)
-    reprec = testdir.inline_run('--baseurl=http://localhost:%s' % webserver.port,
-        '--api=webdriver',
-        '--driver=firefox',
-        '--proxyhost=localhost',
-        '--proxyport=%s' % webserver.port,
-        file_test)
+    reprec = testdir.inline_run('--baseurl=http://localhost:%s' % webserver.port, '--api=webdriver', '--driver=firefox', '--proxyhost=localhost', '--proxyport=%s' % webserver.port, file_test)
     passed, skipped, failed = reprec.listoutcomes()
     assert len(passed) == 1
+
 
 @pytest.mark.chrome
 def testChromeProxy(testdir, webserver):
@@ -147,14 +175,10 @@ def testChromeProxy(testdir, webserver):
             header = mozwebqa.selenium.find_element_by_tag_name('h1')
             assert header.text == 'Success!'
     """)
-    reprec = testdir.inline_run('--baseurl=http://localhost:%s' % webserver.port,
-        '--api=webdriver',
-        '--driver=chrome',
-        '--proxyhost=localhost',
-        '--proxyport=%s' % webserver.port,
-        file_test)
+    reprec = testdir.inline_run('--baseurl=http://localhost:%s' % webserver.port, '--api=webdriver', '--driver=chrome', '--proxyhost=localhost', '--proxyport=%s' % webserver.port, file_test)
     passed, skipped, failed = reprec.listoutcomes()
     assert len(passed) == 1
+
 
 @pytest.mark.opera
 def testOperaProxy(testdir, webserver):
@@ -167,14 +191,10 @@ def testOperaProxy(testdir, webserver):
             header = mozwebqa.selenium.find_element_by_tag_name('h1')
             assert header.text == 'Success!'
     """)
-    reprec = testdir.inline_run('--baseurl=http://localhost:%s' % webserver.port,
-        '--api=webdriver',
-        '--driver=opera',
-        '--proxyhost=localhost',
-        '--proxyport=%s' % webserver.port,
-        file_test)
+    reprec = testdir.inline_run('--baseurl=http://localhost:%s' % webserver.port, '--api=webdriver', '--driver=opera', '--proxyhost=localhost', '--proxyport=%s' % webserver.port, file_test)
     passed, skipped, failed = reprec.listoutcomes()
     assert len(passed) == 1
+
 
 def testEventListeningWebDriverClientHook(testdir, webserver):
     file_test = testdir.makepyfile("""
@@ -198,6 +218,7 @@ def testEventListeningWebDriverClientHook(testdir, webserver):
                                 file_test)
     passed, skipped, failed = reprec.listoutcomes()
     assert len(passed) == 1
+
 
 class ConcreteEventListener(AbstractEventListener):
     def before_navigate_to(self, url, driver):

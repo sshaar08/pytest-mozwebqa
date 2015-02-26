@@ -25,6 +25,9 @@ def pytest_configure(config):
             'Tests are assumed to be destructive unless this marker is '
             'present. This reduces the risk of running destructive tests '
             'accidentally.')
+        config.addinivalue_line(
+            'markers', 'selenium_noclose: Do not close the WebDriver window at the '
+            'end of the test (WebDriver only).')
 
         if config.option.webqa_report_path:
             from html_report import HTMLReport
@@ -131,7 +134,7 @@ def pytest_runtest_setup(item):
 
 
 def pytest_runtest_teardown(item):
-    if hasattr(TestSetup, 'selenium') and TestSetup.selenium and 'skip_selenium' not in item.keywords:
+    if hasattr(TestSetup, 'selenium') and TestSetup.selenium and 'skip_selenium' not in item.keywords and 'selenium_noclose' not in item.keywords:
         TestSetup.selenium_client.stop()
 
 
