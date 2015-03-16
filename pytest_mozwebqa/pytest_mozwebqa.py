@@ -372,22 +372,25 @@ def pytest_addoption(parser):
                     default='results/index.html',
                     help='create mozilla webqa custom report file at given path. (default: %default)')
 
-    group = parser.getgroup("saucelabs, saucelabs")
+    group = parser.getgroup("saucelabs flags")
     group.addoption('--max_duration',
                     action='store',
                     type='int',
+                    metavar='num',
                     default=False,
                     help='Sauce limits the duration of tests (default: 1800 secs)')
 
     group.addoption('--command_timeout',
                     action='store',
                     type='int',
+                    metavar='num',
                     default=False,
                     help='Sauce limits how long Selenium can take to run a command in our browser (default: 300 secs)')
 
     group.addoption('--idle_timeout',
                     action='store',
                     type='int',
+                    metavar='num',
                     default=False,
                     help='Sauce limits how long a browser can wait for a test to send a new command (default: 90 secs)')
 
