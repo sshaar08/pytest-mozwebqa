@@ -365,12 +365,31 @@ def pytest_addoption(parser):
                      help='credendials file containing sauce labs username and api key.')
 
     group = parser.getgroup("terminal reporting")
-    group.addoption('--webqareport',
+    group.addoption("--webqareport",
                     action='store',
                     dest='webqa_report_path',
                     metavar='path',
                     default='results/index.html',
                     help='create mozilla webqa custom report file at given path. (default: %default)')
+
+    group = parser.getgroup("saucelabs, saucelabs")
+    group.addoption('--max_duration',
+                    action='store',
+                    type='int',
+                    default=False,
+                    help='Sauce limits the duration of tests (default: 1800 secs)')
+
+    group.addoption('--command_timeout',
+                    action='store',
+                    type='int',
+                    default=False,
+                    help='Sauce limits how long Selenium can take to run a command in our browser (default: 300 secs)')
+
+    group.addoption('--idle_timeout',
+                    action='store',
+                    type='int',
+                    default=False,
+                    help='Sauce limits how long a browser can wait for a test to send a new command (default: 90 secs)')
 
 
 def split_class_and_test_names(nodeid):

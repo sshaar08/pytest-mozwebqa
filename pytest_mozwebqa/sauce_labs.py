@@ -27,6 +27,10 @@ class Client(selenium_client.Client):
         self.platform_version = options.platform_version
         self.device_name = options.device_name
         self.appium = options.appium_version
+        #added options
+        self.max_duration = options.max_duration  # max test duration
+        self.command_timeout = options.command_timeout  # max time to wait for command to finish
+        self.idle_timeout = options.idle_timeout  # max time to wait for new command
 
         self.keywords = keywords
         self.build = options.build
@@ -71,13 +75,20 @@ class Client(selenium_client.Client):
         capabilities = self.common_settings
         if self.appium:
             capabilities.update({'platformName': self.platform,
-                            'browserName': self.browser_name,
-                            'platformVersion': self.platform_version,
-                            'deviceName': self.device_name,
-                            'appiumVersion': self.appium})
+                                'browserName': self.browser_name,
+                                 'platformVersion': self.platform_version,
+                                 'deviceName': self.device_name,
+                                 'appiumVersion': self.appium})
         else:
             capabilities.update({'platform': self.platform,
-                            'browserName': self.browser_name})
+                                 'browserName': self.browser_name})
+        #handling of if sauce options set
+        if self.max_duration:
+            capabilities['maxDuration'] = self.max_duration
+        if self.command_timeout:
+            capabilities['commandTimeout'] = self.command_timeout
+        if self.idle_timeout:
+            capabilities['idleTimeout'] = self.idle_timeout
 
         if self.browser_version:
             capabilities['version'] = self.browser_version
@@ -150,12 +161,12 @@ class Job(object):
             html.param(
                 value=flash_vars.replace(' ', ''),
                 name='flashvars'),
-                width='100%',
-                height='100%',
-                type='application/x-shockwave-flash',
-                data='https://saucelabs.com/flowplayer/flowplayer-3.2.5.swf?0.2930636672245027',
-                name='player_api',
-                id='player_api'),
+            width='100%',
+            height='100%',
+            type='application/x-shockwave-flash',
+            data='https://saucelabs.com/flowplayer/flowplayer-3.2.5.swf?0.2930636672245027',
+            name='player_api',
+            id='player_api'),
             id='player%s' % self.session_id,
             class_='video')
 
