@@ -376,21 +376,21 @@ def pytest_addoption(parser):
     group.addoption('--max_duration',
                     action='store',
                     type='int',
-                    metavar='num',
+                    metavar='int',
                     default=False,
                     help='Sauce limits the duration of tests (default: 1800 secs)')
 
     group.addoption('--command_timeout',
                     action='store',
                     type='int',
-                    metavar='num',
+                    metavar='int',
                     default=False,
                     help='Sauce limits how long Selenium can take to run a command in our browser (default: 300 secs)')
 
     group.addoption('--idle_timeout',
                     action='store',
                     type='int',
-                    metavar='num',
+                    metavar='int',
                     default=False,
                     help='Sauce limits how long a browser can wait for a test to send a new command (default: 90 secs)')
 
