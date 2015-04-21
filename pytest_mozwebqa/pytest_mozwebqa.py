@@ -31,12 +31,6 @@ def pytest_configure(config):
             config._html = HTMLReport(config)
             config.pluginmanager.register(config._html)
 
-        if not config.option.run_destructive:
-            if config.option.markexpr:
-                config.option.markexpr = 'nondestructive and (%s)' % config.option.markexpr
-            else:
-                config.option.markexpr = 'nondestructive'
-
 
 def pytest_unconfigure(config):
     html = getattr(config, '_html', None)
@@ -84,6 +78,7 @@ def pytest_runtest_setup(item):
 
     # consider this environment sensitive if the base url or any redirection
     # history matches the regular expression
+    '''
     sensitive = False
     if TestSetup.base_url and not item.config.option.skip_url_check:
         r = requests.get(TestSetup.base_url, verify=False, timeout=REQUESTS_TIMEOUT)
@@ -91,7 +86,7 @@ def pytest_runtest_setup(item):
         matches = [re.search(item.config.option.sensitive_url, u) for u in urls]
         sensitive = any(matches)
 
-    destructive = 'nondestructive' not in item.keywords
+    destructive = 'destructive' in item.keywords
 
     if (sensitive and destructive):
         first_match = matches[next(i for i, match in enumerate(matches) if match)]
@@ -101,7 +96,7 @@ def pytest_runtest_setup(item):
                      'considered a sensitive environment. If this test is '
                      'not destructive, add the \'nondestructive\' marker to '
                      'it. Sensitive URL: %s' % first_match.string)
-
+    '''
     if item.config.option.sauce_labs_credentials_file:
         item.sauce_labs_credentials = credentials.read(item.config.option.sauce_labs_credentials_file)
 
@@ -309,20 +304,6 @@ def pytest_addoption(parser):
                      dest='event_listener',
                      metavar='str',
                      help='selenium eventlistener class, e.g. package.module.EventListenerClassName.')
-
-    group = parser.getgroup('safety', 'safety')
-    group._addoption('--sensitiveurl',
-                     action='store',
-                     dest='sensitive_url',
-                     default='(firefox\.com)|(mozilla\.(com|org))',
-                     metavar='str',
-                     help='regular expression for identifying sensitive urls. (default: %default)')
-    group._addoption('--destructive',
-                     action='store_true',
-                     dest='run_destructive',
-                     default=False,
-                     help='include destructive tests (tests not explicitly marked as \'nondestructive\'). (default: %default)')
-
     group = parser.getgroup('credentials', 'credentials')
     group._addoption("--credentials",
                      action="store",
